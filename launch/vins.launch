@@ -1,0 +1,19 @@
+<launch>
+    <include file="$(find px4)/launch/indoor2.launch"/>
+    
+    <group>
+        <node pkg="vins" type="vins_node" name="vins_estimator" output="log" 
+                args="$(find vins)/../config/xtdrone_sitl/px4_sitl_stereo_imu_config.yaml" 
+                launch-prefix="" />
+
+        <include file="$(find vins)/launch/vins_rviz.launch" />
+        
+        <node pkg="srun" type="vins_transfer.py" name="vins_transfer" output="log"
+                args="iris 0" launch-prefix=""/>
+    </group>
+
+    <include file="$(find srun)/launch/single_control.launch">
+        <arg name="communication_arg" value="iris 0"/>
+        <arg name="control_arg" value="iris 1 vel"/>
+    </include>
+</launch>

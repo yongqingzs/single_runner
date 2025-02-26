@@ -1,0 +1,11 @@
+<launch>
+    <include file="$(find srun)/launch/vins.launch">
+    </include>
+
+    <node pkg="srun" type="ego_transfer.py" name="ego_transfer" output="log"
+                args="iris 0" launch-prefix=""/>
+    <node name="rviz_ego" pkg="rviz" type="rviz" args="-d $(find srun)/rviz/ego_rviz.rviz"/>
+
+    <include file="$(find ego_planner)/launch/single_uav.launch">
+    </include>
+</launch>

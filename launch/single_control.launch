@@ -1,0 +1,12 @@
+<launch>
+    <arg name="communication_arg" default="iris 0"/>
+    <arg name="control_arg" default="iris 1 vel"/>
+
+    <group>
+        <node pkg="srun" type="multirotor_communication.py" name="communication" output="screen"
+                args="$(arg communication_arg)" launch-prefix=""/>
+
+        <node pkg="srun" type="multirotor_keyboard_control.py" name="keyboard_control" output="screen"
+                args="$(arg control_arg)" launch-prefix="xterm -e"/>
+    </group>
+</launch>
