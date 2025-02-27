@@ -1,12 +1,14 @@
 <launch>
-    <arg name="communication_arg" default="iris 0"/>
-    <arg name="control_arg" default="iris 1 vel"/>
+    <arg name="uav_name" default='iris'/>
+    <arg name="communication_id" default='0'/>
+    <arg name="control_id" default='1'/>
+    <arg name="control_mode" default='vel'/>
 
     <group>
-        <node pkg="srun" type="multirotor_communication.py" name="communication" output="screen"
-                args="$(arg communication_arg)" launch-prefix=""/>
+        <node pkg="srun" type="multirotor_communication.py" name="$(arg uav_name)_$(arg communication_id)_communication" output="screen"
+                args="$(arg uav_name) $(arg communication_id)" launch-prefix=""/>
 
-        <node pkg="srun" type="multirotor_keyboard_control.py" name="keyboard_control" output="screen"
-                args="$(arg control_arg)" launch-prefix="xterm -e"/>
+        <node pkg="srun" type="multirotor_keyboard_control.py" name="$(arg control_mode)_keyboard_control" output="screen"
+                args="$(arg uav_name) $(arg control_id) $(arg control_mode)" launch-prefix="xterm -e"/>
     </group>
 </launch>

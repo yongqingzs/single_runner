@@ -1,5 +1,11 @@
 <launch>
-    <include file="$(find px4)/launch/indoor2.launch"/>
+    <arg name="scene" default='outdoor5'/>
+    <arg name="uav_name" value='iris'/>
+    <arg name="communication_id" value='0'/>
+    <arg name="control_id" value='1'/>
+    <arg name="control_mode" value='vel'/>
+
+    <include file="$(find px4)/launch/$(arg scene).launch"/>
     
     <group>
         <node pkg="vins" type="vins_node" name="vins_estimator" output="log" 
@@ -8,12 +14,14 @@
 
         <include file="$(find vins)/launch/vins_rviz.launch" />
         
-        <node pkg="srun" type="vins_transfer.py" name="vins_transfer" output="log"
-                args="iris 0" launch-prefix=""/>
+        <node pkg="srun" type="vins_transfer.py" name="$(arg uav_name)_$(arg communication_id)_vins_transfer" output="log"
+                args="$(arg uav_name) $(arg communication_id)" launch-prefix=""/>
     </group>
 
     <include file="$(find srun)/launch/single_control.launch">
-        <arg name="communication_arg" value="iris 0"/>
-        <arg name="control_arg" value="iris 1 vel"/>
+        <arg name="uav_name" value='$(arg uav_name)'/>
+        <arg name="communication_id" value='$(arg communication_id)'/>
+        <arg name="control_id" value='$(arg control_id)'/>
+        <arg name="control_mode" value='$(arg control_mode)'/>
     </include>
 </launch>

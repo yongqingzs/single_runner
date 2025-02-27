@@ -6,6 +6,7 @@ from pyquaternion import Quaternion
 import tf
 import sys
 
+note_flag = 0
 vehicle_type = sys.argv[1]
 vehicle_id = sys.argv[2]
 local_pose = PoseStamped()
@@ -14,7 +15,10 @@ quaternion = tf.transformations.quaternion_from_euler(-math.pi/2, 0, -math.pi/2)
 q = Quaternion([quaternion[3],quaternion[0],quaternion[1],quaternion[2]])
 
 def vision_callback(data):
-    print("vision_pose received") 
+    global note_flag
+    if note_flag == 0:
+        print("vision_pose received") 
+        note_flag = 1
     local_pose.pose.position.x = data.pose.position.x
     local_pose.pose.position.y = data.pose.position.y
     local_pose.pose.position.z = data.pose.position.z
@@ -24,7 +28,8 @@ def vision_callback(data):
     local_pose.pose.orientation.x = q_[1]
     local_pose.pose.orientation.y = q_[2]
     local_pose.pose.orientation.z = q_[3]
-    
+
+print("Node name: " + vehicle_type+"_"+vehicle_id+'_ego_transfer')
 rospy.init_node(vehicle_type+"_"+vehicle_id+'_ego_transfer')
 rospy.Subscriber(vehicle_type+"_"+vehicle_id+"/mavros/vision_pose/pose", PoseStamped, vision_callback,queue_size=1)
 position_pub = rospy.Publisher(vehicle_type+"_"+vehicle_id+"/camera_pose", PoseStamped, queue_size=1)
