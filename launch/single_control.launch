@@ -3,12 +3,13 @@
     <arg name="communication_id" default='0'/>
     <arg name="control_id" default='1'/>
     <arg name="control_mode" default='vel'/>
+    <arg name="exit_flag" default="exit"/>
 
     <group>
         <node pkg="srun" type="multirotor_communication.py" name="$(arg uav_name)_$(arg communication_id)_communication" output="screen"
                 args="$(arg uav_name) $(arg communication_id)" launch-prefix=""/>
 
         <node pkg="srun" type="multirotor_keyboard_control.py" name="$(arg control_mode)_keyboard_control" output="screen"
-                args="$(arg uav_name) $(arg control_id) $(arg control_mode)" launch-prefix="xterm -e"/>
+                args="$(arg uav_name) $(arg control_id) $(arg control_mode) $(arg exit_flag)" launch-prefix="xterm -e"/>
     </group>
 </launch>

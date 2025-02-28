@@ -13,7 +13,7 @@ from std_msgs.msg import String
 3. 控制方式: control_type
 """
 # only for test
-DEBUG_FLAG = 1
+DEBUG_FLAG = 0
 if DEBUG_FLAG == 0:
     pass
 elif DEBUG_FLAG == 1:
@@ -106,7 +106,12 @@ if __name__=="__main__":
     multirotor_type = sys.argv[1]
     multirotor_num = int(sys.argv[2])
     control_type = sys.argv[3]
-    
+
+    c_exit_flag = False
+    if len(sys.argv) > 4:
+        if sys.argv[4] == 'exit':
+            c_exit_flag = True
+
     if multirotor_num == 18:
         formation_configs = ['waiting', 'cuboid', 'sphere', 'diamond']
     elif multirotor_num == 9:
@@ -168,8 +173,19 @@ if __name__=="__main__":
                 if elapsed_time > 20.0:
                     key = 's'
                     c_flag = 0
+                    if c_exit_flag:
+                        c_flag = 4
+                        c_start_time = time.time()
+                    else:
+                        c_start_time = None
                     print("One click over!")
-
+        elif c_flag == 4:
+            if c_start_time is not None:
+                elapsed_time = time.time() - c_start_time
+                print("Man, I will eixt after 5s!")
+                if elapsed_time > 5.0:
+                    exit()
+        
         if key == 'w' :
             forward = forward + LINEAR_STEP_SIZE
             print_msg()

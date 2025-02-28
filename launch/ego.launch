@@ -1,8 +1,8 @@
 <launch>
     <arg name="uav_name" default='iris'/>
     <arg name="communication_id" default='0'/>
-    <node pkg="srun" type="ego_transfer.py" name="$(arg uav_name)_$(arg communication_id)_ego_transfer" output="screen"
-                args="$(arg uav_name) $(arg communication_id)" launch-prefix="xterm -e"/>
+    <node pkg="srun" type="ego_transfer.py" name="$(arg uav_name)_$(arg communication_id)_ego_transfer" output="log"
+                args="$(arg uav_name) $(arg communication_id)" launch-prefix=""/>
     <node name="rviz_ego" pkg="rviz" type="rviz" args="-d $(find srun)/rviz/ego_rviz.rviz"/>
 
     <include file="$(find ego_planner)/launch/single_uav.launch">
