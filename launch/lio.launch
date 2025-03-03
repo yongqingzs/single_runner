@@ -1,5 +1,6 @@
 <launch>
-    <arg name="scene" default='outdoor5'/>
+    <!-- <arg name="scene" default='outdoor5_laser'/> -->
+    <arg name="scene" default='indoor4'/>
     <arg name="uav_name" value='iris'/>
     <arg name="communication_id" value='0'/>
     <arg name="control_id" value='1'/>
@@ -8,14 +9,10 @@
     <include file="$(find px4)/launch/$(arg scene).launch"/>
     
     <group>
-        <node pkg="vins" type="vins_node" name="vins_estimator" output="log" 
-                args="$(find vins)/../config/xtdrone_sitl/px4_sitl_stereo_imu_config.yaml" 
-                launch-prefix="" />
+        <include file="$(find fast_lio)/launch/mapping_avia.launch"/>
 
-        <include file="$(find vins)/launch/vins_rviz.launch" />
-        
-        <node pkg="srun" type="vins_transfer.py" name="$(arg uav_name)_$(arg communication_id)_vins_transfer" output="log"
-                args="$(arg uav_name) $(arg communication_id)" launch-prefix=""/>
+        <node pkg="srun" type="lio_transfer.py" name="$(arg uav_name)_$(arg communication_id)_lio_transfer" output="screen"
+                args="$(arg uav_name) $(arg communication_id)" launch-prefix="xterm -e"/>
     </group>
 
     <include file="$(find srun)/launch/single_control.launch">
@@ -23,6 +20,5 @@
         <arg name="communication_id" value='$(arg communication_id)'/>
         <arg name="control_id" value='$(arg control_id)'/>
         <arg name="control_mode" value='$(arg control_mode)'/>
-        <arg name="exit_flag" value="exit"/>
     </include>
 </launch>

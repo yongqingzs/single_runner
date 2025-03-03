@@ -254,7 +254,7 @@ if __name__ == '__main__':
     #     communication.start()
     # except rospy.ROSException:
     #     rospy.logerr("Timeout waiting for PX4 to start.")
-    time.sleep(10)
+    time.sleep(15)
     communication = Communication(sys.argv[1],sys.argv[2])
     communication.start()
     
