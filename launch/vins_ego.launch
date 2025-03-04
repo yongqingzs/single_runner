@@ -1,5 +1,0 @@
-<launch>
-    <include file="$(find srun)/launch/vins.launch"/>
-
-    <include file="$(find srun)/launch/ego.launch"/>
-</launch>

@@ -3,7 +3,7 @@
     <arg name="communication_id" default='0'/>
     <arg name="control_id" default='1'/>
     <arg name="control_mode" default='vel'/>
-    <arg name="exit_flag" default="exit"/>
+    <arg name="exit_flag" default=""/>
 
     <group>
         <node pkg="srun" type="multirotor_communication.py" name="$(arg uav_name)_$(arg communication_id)_communication" output="screen"

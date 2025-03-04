@@ -7,6 +7,8 @@ from pyquaternion import Quaternion
 import tf
 import sys
 
+DEBUG_FLAG = False
+
 if len(sys.argv) < 2:
     sys.argv.append("iris")
     sys.argv.append("0")
@@ -19,7 +21,8 @@ quaternion = tf.transformations.quaternion_from_euler(0, -math.pi/2, math.pi/2)
 q = Quaternion([quaternion[3],quaternion[0],quaternion[1],quaternion[2]])
 
 def vins_callback(data):
-    # print("Vins pose received")
+    if DEBUG_FLAG:
+        print("Vins pose received")
     local_pose.pose.position.x = data.pose.pose.position.x
     local_pose.pose.position.y = data.pose.pose.position.y
     local_pose.pose.position.z = data.pose.pose.position.z
@@ -29,8 +32,9 @@ def vins_callback(data):
     local_pose.pose.orientation.x = q_[1]
     local_pose.pose.orientation.y = q_[2]
     local_pose.pose.orientation.z = q_[3]
-    # print("before: ", data.pose.pose.position.x, data.pose.pose.position.y, data.pose.pose.position.z)
-    # print("after: ", local_pose.pose.position.x, local_pose.pose.position.y, local_pose.pose.position.z)
+    if DEBUG_FLAG:
+        print("before: ", data.pose.pose.position.x, data.pose.pose.position.y, data.pose.pose.position.z)
+        print("after: ", local_pose.pose.position.x, local_pose.pose.position.y, local_pose.pose.position.z)
     
 rospy.init_node(vehicle_type+"_"+vehicle_id+'_vins_transfer')
 rospy.Subscriber("/vins_estimator/camera_pose", Odometry, vins_callback,queue_size=1)
