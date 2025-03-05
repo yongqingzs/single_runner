@@ -80,8 +80,15 @@ class Communication:
         self.armService = rospy.ServiceProxy(self.vehicle_type+'_'+self.vehicle_id+"/mavros/cmd/arming", CommandBool)
         self.flightModeService = rospy.ServiceProxy(self.vehicle_type+'_'+self.vehicle_id+"/mavros/set_mode", SetMode)
         self.set_param_srv = rospy.ServiceProxy(self.vehicle_type+'_'+self.vehicle_id+"/mavros/param/set", ParamSet)
-        rcl_except = ParamValue(4, 0.0)
-        self.set_param_srv("COM_RCL_EXCEPT", rcl_except)
+        # rcl_except = ParamValue(4, 0.0)
+        # self.set_param_srv("COM_RCL_EXCEPT", rcl_except)
+        try:
+            # 尝试使用新参数名 (可能是 COM_RCL_EXCEPT_LIST 或 COM_RC_IN_MODE)
+            rcl_except = ParamValue(4, 0.0)
+            self.set_param_srv("COM_RCL_EXCEPT", rcl_except)
+            rospy.loginfo("Successfully set RC parameter")
+        except rospy.ServiceException as e:
+            rospy.logwarn(f"Could not set RC parameter: {e}. Continuing anyway...")
 
         print(self.vehicle_type+'_'+self.vehicle_id+": "+"communication initialized")
 

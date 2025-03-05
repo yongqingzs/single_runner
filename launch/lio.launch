@@ -1,6 +1,6 @@
 <launch>
     <!-- <arg name="scene" default='outdoor5_laser'/> -->
-    <arg name="scene" default='indoor4'/>
+    <arg name="scene" default='indoor4_laser'/>
     <arg name="uav_name" value='iris'/>
     <arg name="communication_id" value='0'/>
     <arg name="control_id" value='1'/>
